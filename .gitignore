@@ -1,0 +1,7 @@
+math_api/node_modules/
+math_api/coverage/
+math_api/package-lock.json
+
+rocket-test/node_modules/
+rocket-test/coverage/
+rocket-test/package-lock.json
