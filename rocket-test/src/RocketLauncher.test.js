@@ -1,5 +1,6 @@
 import Rocket from "./Rocket.js";
 import RocketLauncher from "./RocketLauncher.js";
+import RocketRepairKit from "./RocketRepairKit.js";
 
 describe("A rocket launcher", () => {
   it("should run all rocket", () => {
@@ -57,7 +58,7 @@ describe("A rocket launcher", () => {
   it("should repair some repairable rocket when repair kit cannot repair some the rocket", async () => {
     // Arrange
     const repairableRocket = new Rocket("repairableRocket");
-    const unrepairableRocket = new Rocket("unrepairableRocket"); 
+    const unrepairableRocket = new Rocket("unrepairableRocket");
     /** mock! Kita butuh mengubah implementasi fungsi untuk menghasilkan keadaan sesuai skenario uji.
      * Dan kita butuh untuk menguji apakah fungsi yang dijalankan/diperlakukan. */
     const fakeRocketRepairKit = {
@@ -78,5 +79,32 @@ describe("A rocket launcher", () => {
      */
     expect(fakeRocketRepairKit.repair).toBeCalled();
     expect(fakeRocketRepairKit.repair).toBeCalledWith(repairableRocket);
+  });
+
+  // spy example
+  it("should repair all the rockets with repair kit correctly", async () => {
+    // Arrange
+    const nasaRocket = new Rocket("Nasa");
+    const spaceXRocket = new Rocket("SpaceX"); // Menggunakan objek real
+    const rocketRepairKit = new RocketRepairKit(
+      {},
+      {},
+      {},
+    ); 
+    
+    /** spy! Memata-matai fungsi repair pada objek RocketRepairKit
+     * Tujuannya, untuk memastikan fungsi repair dijalankan */
+    const spyRepair = vi.spyOn(rocketRepairKit, "repair");
+    const rocketLauncher = new RocketLauncher(rocketRepairKit, [
+      nasaRocket,
+      spaceXRocket,
+    ]);
+
+    // Action
+    const result = await rocketLauncher.repairAllRocket(); // Assert
+    expect(spyRepair).toBeCalledTimes(2);
+    expect(spyRepair).toBeCalledWith(nasaRocket);
+    expect(spyRepair).toBeCalledWith(spaceXRocket);
+    expect(result).toEqual("all rocket repaired!");
   });
 });
