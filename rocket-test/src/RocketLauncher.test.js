@@ -1,5 +1,5 @@
 import Rocket from "./Rocket.js";
-import RocketLauncer from "./RocketLauncher.js";
+import RocketLauncher from "./RocketLauncher.js";
 
 describe("A rocket launcher", () => {
   it("should run all rocket", () => {
@@ -8,7 +8,7 @@ describe("A rocket launcher", () => {
     const spacexRocket = new Rocket("SpaceX");
 
     // Dummy Test
-    const rocketLauncher = new RocketLauncer({}, [nasaRocket, spacexRocket]);
+    const rocketLauncher = new RocketLauncher({}, [nasaRocket, spacexRocket]);
 
     // Action
     rocketLauncher.launchAllRockets();
@@ -25,7 +25,7 @@ describe("A rocket launcher", () => {
     const spacexRocket = new Rocket("SpaceX");
 
     // Dummy Test
-    const rocketLauncher = new RocketLauncer({}, [nasaRocket, spacexRocket]);
+    const rocketLauncher = new RocketLauncher({}, [nasaRocket, spacexRocket]);
 
     // Action
     rocketLauncher.launchRocketByQueue();
@@ -34,8 +34,9 @@ describe("A rocket launcher", () => {
     expect(nasaRocket.engineStatus).toEqual("active");
     expect(spacexRocket.engineStatus).toEqual("inactive");
     expect(rocketLauncher.rockets.length).toEqual(1);
-  }); // stub example
+  });
 
+  // stub example
   it("should return correct result when repair kit cannot repair the rocket", async () => {
     // Arrange
     /** stub! Kita butuh mengubah implementasi fungsi untuk menghasilkan keadaan sesuai skenario uji.
@@ -44,11 +45,38 @@ describe("A rocket launcher", () => {
       repair: () => Promise.reject("failed to repair the rocket"),
     };
     const rocketLauncher = new RocketLauncher(fakeRocketRepairKit, [{}]);
-     
+
     // Action
-    const result = await rocketLauncher.repairAllRockets(); 
+    const result = await rocketLauncher.repairAllRocket();
 
     // Assert
     expect(result).toEqual("there was 1 of 1 rocket fail to repair!");
+  });
+
+  // mock example
+  it("should repair some repairable rocket when repair kit cannot repair some the rocket", async () => {
+    // Arrange
+    const repairableRocket = new Rocket("repairableRocket");
+    const unrepairableRocket = new Rocket("unrepairableRocket"); 
+    /** mock! Kita butuh mengubah implementasi fungsi untuk menghasilkan keadaan sesuai skenario uji.
+     * Dan kita butuh untuk menguji apakah fungsi yang dijalankan/diperlakukan. */
+    const fakeRocketRepairKit = {
+      repair: vi.fn().mockImplementation((rocket) => {
+        if (rocket.name === "repairableRocket") {
+          return Promise.resolve();
+        }
+        return Promise.reject("failed to repair the rocket");
+      }),
+    };
+    const rocketLauncher = new RocketLauncher(fakeRocketRepairKit, [
+      repairableRocket,
+      unrepairableRocket,
+    ]); // Action
+    const result = await rocketLauncher.repairAllRocket(); // Assert
+    expect(result).toEqual(`there was 1 of 2 rocket fail to repair!`); /**
+     * memastikan bahwa fungsi repair terpanggil
+     */
+    expect(fakeRocketRepairKit.repair).toBeCalled();
+    expect(fakeRocketRepairKit.repair).toBeCalledWith(repairableRocket);
   });
 });
