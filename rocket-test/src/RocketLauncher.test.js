@@ -6,7 +6,9 @@ describe('A rocket launcher', () => {
         // Arrange
         const nasaRocket = new Rocket('NASA');
         const spacexRocket = new Rocket('SpaceX');
-        const rocketLauncher = new RocketLauncer([nasaRocket, spacexRocket]);
+
+        // Dummy Test
+        const rocketLauncher = new RocketLauncer({}, [nasaRocket, spacexRocket]);
 
         // Action
         rocketLauncher.launchAllRockets();
@@ -21,7 +23,9 @@ describe('A rocket launcher', () => {
         // Arrange
         const nasaRocket = new Rocket('NASA');
         const spacexRocket = new Rocket('SpaceX');
-        const rocketLauncher = new RocketLauncer([nasaRocket, spacexRocket]);
+        
+        // Dummy Test
+        const rocketLauncher = new RocketLauncer({}, [nasaRocket, spacexRocket]);
 
         // Action
         rocketLauncher.launchRocketByQueue();
