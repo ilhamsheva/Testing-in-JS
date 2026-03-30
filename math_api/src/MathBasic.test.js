@@ -57,3 +57,45 @@ describe("A substract function", () => {
     expect(MathBasic.substract(-1, 2)).toBe(-3);
   });
 });
+
+describe("A multiply function", () => {
+  it("should throw error when not given 2 parameters", () => {
+    expect(() => MathBasic.multiply()).toThrowError();
+    expect(() => MathBasic.multiply(1)).toThrowError();
+    expect(() => MathBasic.multiply(1, 2, 3)).toThrowError();
+  });
+
+  it("should throw error if not number", () => {
+    expect(() => MathBasic.multiply("1", 2)).toThrowError();
+    expect(() => MathBasic.multiply(1, "2")).toThrowError();
+  });
+
+  it("should return the multiplication of two numbers", () => {
+    expect(MathBasic.multiply(2, 3)).toBe(6);
+    expect(MathBasic.multiply(-2, 3)).toBe(-6);
+    expect(MathBasic.multiply(-2, -3)).toBe(6);
+  });
+});
+
+describe("A divide function", () => {
+  it("should throw error when not given 2 parameters", () => {
+    expect(() => MathBasic.divide()).toThrowError();
+    expect(() => MathBasic.divide(1)).toThrowError();
+    expect(() => MathBasic.divide(1, 2, 3)).toThrowError();
+  });
+
+  it("should throw error if not number", () => {
+    expect(() => MathBasic.divide("1", 2)).toThrowError();
+    expect(() => MathBasic.divide(1, "2")).toThrowError();
+  });
+
+  it("should throw error when dividing by 0", () => {
+    expect(() => MathBasic.divide(10, 0)).toThrowError();
+  });
+
+  it("should return the division of two numbers", () => {
+    expect(MathBasic.divide(6, 2)).toBe(3);
+    expect(MathBasic.divide(-6, 2)).toBe(-3);
+    expect(MathBasic.divide(6, 3)).toBe(2);
+  });
+});
